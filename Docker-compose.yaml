@@ -1,0 +1,128 @@
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+    depends_on:
+      - zookeeper
+
+
+  web-backend:
+    env_file:
+      - .env
+    container_name: web-backend
+    image: web-back:0.0.1
+    build:
+      context: ./TaskTrackerMain
+      dockerfile: Dockerfile
+    ports:
+      - "${BACK_PORT}:${BACK_PORT}"
+    depends_on:
+      kafka:
+        condition: service_started
+      service-web-db:
+        condition: service_healthy
+    environment:
+      - SERVER_PORT= ${BACK_PORT}
+      - SPRING_DATASOURCE_URL=${BACK_DOCKER_DB_URL}
+    volumes:
+      - ./TaskTrackerMain/src/main/java/antidimon/web/tasktrackerrest:/app/src/main/java/antidimon/web/tasktrackerrest
+
+  service-web-db:
+    env_file:
+      - .env
+    container_name: service-web-db
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${BACK_DB_PORT}:5432"
+    volumes:
+      - ./TaskTrackerMain/.docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db-data:/var/lib/postgresql/web-data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pg_isready", "-p", "5432", "-d", "${BACK_DB_NAME}", "-U", "${DB_USERNAME}"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+
+
+  email-service:
+    env_file:
+      - .env
+    container_name: emails-service
+    image: emails-service:0.0.1
+    build:
+      context: ./TaskTrackerEmails
+      dockerfile: Dockerfile
+    ports:
+      - "${EMAIL_PORT}:${EMAIL_PORT}"
+    environment:
+      - SERVER_PORT= ${EMAIL_PORT}
+    volumes:
+      - ./TaskTrackerEmails/src/main/java/antidimon/web/tasktrackeremails:/appEmail/src/main/java/antidimon/web/tasktrackeremails
+
+
+
+  stat-service:
+    env_file:
+      - .env
+    container_name: stats-service
+    image: stats-service:0.0.1
+    build:
+      context: ./TaskTrackerStatistics
+      dockerfile: Dockerfile
+    ports:
+      - "${STAT_PORT}:${STAT_PORT}"
+    depends_on:
+      kafka:
+        condition: service_started
+      service-stat-db:
+        condition: service_healthy
+    environment:
+      - SERVER_PORT= ${STAT_PORT}
+      - SPRING_DATASOURCE_URL=${STAT_DB_DOCKER_URL}
+    volumes:
+      - ./TaskTrackerStatistics/src/main/java/antidimon/web/tasktrackerstatistics:/appStats/src/main/java/antidimon/web/tasktrackerstatistics
+
+  service-stat-db:
+    env_file:
+      - .env
+    container_name: service-stat-db
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${STAT_DB_PORT}:5432"
+    volumes:
+      - ./TaskTrackerStatistics/.docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db-data:/var/lib/postgresql/stat-data
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-p", "5432", "-d", "${STAT_DB_NAME}", "-U", "${DB_USERNAME}" ]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+
+
+volumes:
+  db-data:
+  pgadmin-data:

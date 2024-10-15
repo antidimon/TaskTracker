@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS stats;
+SELECT 'CREATE DATABASE stats'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'stats')\gexec

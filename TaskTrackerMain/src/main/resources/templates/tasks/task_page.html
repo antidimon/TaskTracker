@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="/styles/task.css">
+</head>
+<body>
+<header>
+    <a href="/">
+        <h1>Task Manager</h1>
+    </a>
+    <div class="project-name-container">
+        <a th:href="@{/projects/{id}(id=${project.getId()})}">
+            <h2 class="project-name" th:text="${project.getName()}">Проект</h2>
+        </a>
+    </div>
+    <div class="user-info">
+        <h3 th:text="${user}">Пользователь</h3>
+        <form action="/logout" method="post">
+            <button id="change-account-btn" >Сменить аккаунт</button>
+        </form>
+    </div>
+</header>
+
+<main>
+    <form th:action="@{/projects/{project_id}/tasks/{taskName}(project_id=${project.getId()}, taskName=${task.getName()})}" th:object="${task}" method="post">
+        <div class="task-info">
+            <h2>Информация о задаче</h2>
+            <div class="task-detail">
+                <span class="name">Создано: </span><span th:text="${task.getStringCreatedAt()}">Время Создания</span>
+            </div>
+            <input type="hidden" th:field="*{id}">
+            <div class="task-detail">
+                <label for="taskName"><strong>Название:</strong></label>
+                <input type="text" id="taskName" name="taskName" th:field="*{name}" required>
+            </div>
+            <div class="task-detail">
+                <label for="deadline"><strong>Дедлайн:</strong></label>
+                <input type="datetime-local" id="deadline" name="deadline" th:field="*{deadline}" required>
+            </div>
+            <div class="task-detail">
+                <label for="priority"><strong>Приоритет:</strong></label>
+                <select id="priority" name="priority" th:selected="${task.getPriority()}" th:field="*{priority}" required>
+                    <option th:value="3">Высокий</option>
+                    <option th:value="2">Средний</option>
+                    <option th:value="1">Низкий</option>
+                </select>
+            </div>
+            <div class="task-detail">
+                <label for="status"><strong>Статус:</strong></label>
+                <select id="status" name="status" th:selected="${task.getStatus()}" th:field="*{status}" required>
+                    <option th:value="TODO">TODO</option>
+                    <option th:value="IN_PROGRESS">IN_PROGRESS</option>
+                    <option th:value="COMPLETED">COMPLETED</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="save-btn">Сохранить</button>
+    </form>
+    <form th:if="${isOwner}" th:action="@{/projects/{project_id}/tasks/{taskName}/delete(project_id=${project.getId()}, taskName=${task.getName()})}" method="post">
+        <button type="submit" class="delete-btn">Удалить</button>
+    </form>
+
+    <div class="comments-section">
+        <h3 th:text="'Комментарии: ' + ${comments.size()}"></h3>
+        <div class="task-comment" th:each="comment: ${comments}">
+            <div class="comment">
+                <div class="comment-header">
+                    <span class="comment-author" th:text="${comment.getAuthor().getUsername()}"></span>
+                    <span class="date" th:text="${comment.getStringCreatedAt()}">Время</span>
+                </div>
+                <div class="comment-text" th:text="${comment.getComment()}"></div>
+            </div>
+        </div>
+        <form th:action="@{/projects/{project_id}/tasks/{taskName}/comment(project_id=${project.getId()}, taskName=${task.getName()})}" th:object="${newComment}" method="post">
+            <div class="new-comment-form">
+                <label for="newComment">Новый комментарий:</label>
+                <textarea th:field="*{comment}" id="newComment" name="newComment" rows="3" required></textarea>
+                <button type="submit" class="add-comment-btn">Добавить комментарий</button>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>
