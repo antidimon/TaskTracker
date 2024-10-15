@@ -33,4 +33,4 @@ spring:
 
 schedule:
   time: "0 0 0 * * ?" #"0 */3 * * * ?"
-  url: http://email-service:8060/stats
+  url: http://email-service:${EMAIL_SERVICE_PORT}/stats
