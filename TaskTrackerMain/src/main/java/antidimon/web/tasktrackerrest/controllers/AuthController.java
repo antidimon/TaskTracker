@@ -5,12 +5,10 @@ import antidimon.web.tasktrackerrest.models.dto.user.MyUserCreateDTO;
 import antidimon.web.tasktrackerrest.models.dto.user.MyUserOutputDTO;
 import antidimon.web.tasktrackerrest.services.AuthService;
 import antidimon.web.tasktrackerrest.services.EventService;
-import antidimon.web.tasktrackerrest.util.validators.MyUserCreateDTOValidator;
+import antidimon.web.tasktrackerrest.util.validators.MyUserValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AuthController {
 
-    private final MyUserCreateDTOValidator myUserCreateDTOValidator;
+    private final MyUserValidator myUserValidator;
     private final AuthService authService;
     private final EventService eventService;
 
@@ -44,7 +42,7 @@ public class AuthController {
 
         log.info("Request for register new user {}", user.getUsername());
 
-        myUserCreateDTOValidator.validate(user, bindingResult);
+        myUserValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
             log.info("Errors in validation new user {}", user.getUsername());
             return "auth/register";

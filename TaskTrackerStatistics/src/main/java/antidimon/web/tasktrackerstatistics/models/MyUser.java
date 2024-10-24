@@ -6,6 +6,7 @@ import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,12 +19,13 @@ import java.util.Objects;
 @ToString
 public class MyUser implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     @Column(unique = true)
     private String username;
@@ -36,6 +38,15 @@ public class MyUser implements Serializable {
 
     @OneToMany(mappedBy = "user")
     private List<MainEventEntity> events;
+
+
+    public MyUser(String username, String email, LocalDateTime createdAt) {
+        this.username = username;
+        this.email = email;
+        this.createdAt = createdAt;
+        this.events = new ArrayList<>();
+    }
+
 
     @Override
     public boolean equals(Object o) {

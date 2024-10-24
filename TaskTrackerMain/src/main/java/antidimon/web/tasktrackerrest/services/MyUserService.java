@@ -24,7 +24,7 @@ public class MyUserService {
 
     public MyUser findByUsername(String username) throws UsernameNotFoundException {
         Optional<MyUser> foundedUser = myUserRepository.findByUsername(username);
-        return foundedUser.orElseThrow(() -> new UsernameNotFoundException("username not found"));
+        return foundedUser.orElse(null);
     }
 
     public boolean hasEmail(String email) {

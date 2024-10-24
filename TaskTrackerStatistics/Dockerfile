@@ -7,4 +7,4 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /appStats
 COPY --from=builder /appStats/target/*.jar /appStats/*.jar
 EXPOSE 8070
-ENTRYPOINT ["java", "-jar", "/appStats/*.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=docker", "/appStats/*.jar"]

@@ -9,8 +9,4 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootTest
 class TaskTrackerMainTests {
 
-    @Test
-    void contextLoads() {
-    }
-
 }

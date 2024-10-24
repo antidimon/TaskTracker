@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class MyUserCreateDTOValidator implements Validator {
+public class MyUserValidator implements Validator {
 
     private final MyUserService myUserService;
 
@@ -28,8 +28,8 @@ public class MyUserCreateDTOValidator implements Validator {
         if (!Objects.equals(user.getPassword(), user.getConfirmationPassword())){
             errors.rejectValue("password", "", "Wrong confirmation password");
         }
-        if (!Objects.equals(user.getPassword(), user.getConfirmationPassword())){
-            errors.rejectValue("confirmationPassword", "", "Wrong confirmation password");
+        if (myUserService.findByUsername(user.getUsername()) != null){
+            errors.rejectValue("username", "", "Username is taken");
         }
         if (myUserService.hasEmail(user.getEmail())){
             errors.rejectValue("email", "", "Email is already in use");

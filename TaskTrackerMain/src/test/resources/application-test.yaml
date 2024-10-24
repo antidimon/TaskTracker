@@ -1,0 +1,18 @@
+spring:
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    clean-disabled: false
+
+  datasource:
+    name: testDB
+    username: test
+    password: 123
+    url: jdbc:postgresql://localhost:29546/testDB
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true

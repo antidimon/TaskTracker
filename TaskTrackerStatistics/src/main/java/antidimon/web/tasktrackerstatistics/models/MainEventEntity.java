@@ -6,16 +6,19 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = "user_updates")
+@ToString
 public class MainEventEntity implements Serializable {
 
     @Serial
@@ -41,5 +44,17 @@ public class MainEventEntity implements Serializable {
         this.action = action;
         this.time = time;
         this.msg = msg;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MainEventEntity that)) return false;
+        return Objects.equals(user, that.user) && action == that.action && Objects.equals(time, that.time);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(user, action, time);
     }
 }

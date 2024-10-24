@@ -9,11 +9,13 @@
         <option value="$PROJECT_DIR$/TaskTrackerStatistics/pom.xml" />
         <option value="$PROJECT_DIR$/heh/pom.xml" />
         <option value="$PROJECT_DIR$/TaskTrackerWeb/pom.xml" />
+        <option value="$PROJECT_DIR$/eg/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/TaskTrackerWeb/pom.xml" />
+        <option value="$PROJECT_DIR$/eg/pom.xml" />
         <option value="$PROJECT_DIR$/heh/pom.xml" />
       </set>
     </option>

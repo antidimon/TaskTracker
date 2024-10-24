@@ -28,9 +28,6 @@ public class ProjectService {
     private final MyUserRepository myUserRepository;
     private final MyUserService myUserService;
 
-    public List<String> getProjectNamesByOwnerId(long id){
-        return projectRepository.findAllProjectNames(id);
-    }
 
     @Transactional
     public void save(Project project) {
@@ -44,6 +41,19 @@ public class ProjectService {
         }catch (Exception e){
             throw new UnableToDeleteException("Can't delete project");
         }
+    }
+    @Transactional
+    public void addDeveloper(Project project, MyUser user) {
+        projectRepository.addDeveloper(project.getId(), user.getId());
+    }
+
+    @Transactional
+    public void kickDeveloper(Project project, MyUser user) {
+        projectRepository.kickDeveloper(project.getId(), user.getId());
+    }
+
+    public List<String> getProjectNamesByOwnerId(long id){
+        return projectRepository.findAllProjectNames(id);
     }
 
     public Project findById(long user_id) {
@@ -64,16 +74,6 @@ public class ProjectService {
 
     public ProjectOutputDTO getProjectOutputDTO(Project project) {
         return projectMapper.projectToOutputDto(project);
-    }
-
-    @Transactional
-    public void addDeveloper(Project project, MyUser user) {
-        projectRepository.addDeveloper(project.getId(), user.getId());
-    }
-
-    @Transactional
-    public void kickDeveloper(Project project, MyUser user) {
-        projectRepository.kickDeveloper(project.getId(), user.getId());
     }
 
     public List<ProjectOutputDTO> findUserProjects(MyUserOutputDTO myUserOutputDTO) {

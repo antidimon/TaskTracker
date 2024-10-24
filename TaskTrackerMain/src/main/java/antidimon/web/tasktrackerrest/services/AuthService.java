@@ -7,6 +7,7 @@ import antidimon.web.tasktrackerrest.models.dto.user.MyUserCreateDTO;
 import antidimon.web.tasktrackerrest.repositories.MyUserRepository;
 import antidimon.web.tasktrackerrest.security.model.MyUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +25,7 @@ public class AuthService {
     private final MyUserService myUserService;
 
     @Transactional
+    @SneakyThrows
     public MyUserOutputDTO registerUser(MyUserCreateDTO myUserCreateDTO) {
         MyUser user = myUserMapper.createDTOToUser(myUserCreateDTO);
         encodePersonPassword(user);

@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Table(name="comments")
 @Entity
@@ -48,5 +49,17 @@ public class Comment implements Serializable {
         this.comment = comment;
         this.author = author;
         this.task = task;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Comment comment1)) return false;
+        return Objects.equals(comment, comment1.comment) && Objects.equals(author, comment1.author) && Objects.equals(task, comment1.task) && Objects.equals(createdAt, comment1.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(comment, author, task, createdAt);
     }
 }

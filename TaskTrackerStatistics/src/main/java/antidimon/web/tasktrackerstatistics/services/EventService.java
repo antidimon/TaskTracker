@@ -41,6 +41,7 @@ public class EventService {
         MainEventEntity mainEventEntity = modelMapper.map(mainEvent, MainEventEntity.class);
         mainEventEntity.setUser(user);
         mainEventEntity.setMsg(this.getMessage(mainEvent));
+
         log.debug("Created event entity to save for user {}", user.getUsername());
         mainEventRepository.save(mainEventEntity);
     }

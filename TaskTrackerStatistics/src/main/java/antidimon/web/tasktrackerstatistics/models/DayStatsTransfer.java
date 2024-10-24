@@ -2,6 +2,8 @@ package antidimon.web.tasktrackerstatistics.models;
 
 import lombok.*;
 
+import java.util.Objects;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -12,6 +14,18 @@ public class DayStatsTransfer {
     private String email;
     private int startedTasks;
     private int completedTasks;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DayStatsTransfer that)) return false;
+        return startedTasks == that.startedTasks && completedTasks == that.completedTasks && Objects.equals(email, that.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, startedTasks, completedTasks);
+    }
 }
 
 

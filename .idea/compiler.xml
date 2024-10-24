@@ -13,6 +13,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="eg" target="17" />
       <module name="heh" target="17" />
       <module name="TaskTrackerWeb" target="17" />
     </bytecodeTargetLevel>
@@ -23,6 +24,7 @@
       <module name="TaskTrackerMain" options="-parameters" />
       <module name="TaskTrackerStatistics" options="-parameters" />
       <module name="TaskTrackerWeb" options="-parameters" />
+      <module name="eg" options="-parameters" />
       <module name="heh" options="-parameters" />
     </option>
   </component>

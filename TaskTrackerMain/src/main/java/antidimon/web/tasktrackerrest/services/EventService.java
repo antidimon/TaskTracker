@@ -6,7 +6,6 @@ import antidimon.web.tasktrackerrest.kafka.KafkaEventProducer;
 import antidimon.web.tasktrackerrest.kafka.MainEvent;
 import antidimon.web.tasktrackerrest.models.dto.user.MyUserOutputDTO;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -15,7 +14,6 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class EventService {
 
-    private final ModelMapper modelMapper = new ModelMapper();
     private final KafkaEventProducer kafkaEventProducer;
 
     public void sendEvent(MyUserOutputDTO user, Actions action, HashMap<String, String> msg) {

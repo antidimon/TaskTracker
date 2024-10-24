@@ -1,14 +1,17 @@
-package antidimon.web.tasktrackerrest.security;
+package antidimon.web.tasktrackerrest.config;
 
 import antidimon.web.tasktrackerrest.security.handlers.AuthFailureHandler;
 import antidimon.web.tasktrackerrest.security.handlers.AuthSuccessHandler;
 import antidimon.web.tasktrackerrest.services.AuthService;
 import antidimon.web.tasktrackerrest.services.EventService;
+import lombok.RequiredArgsConstructor;
+import org.apache.kafka.clients.admin.NewTopic;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,8 +19,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
-@EnableWebSecurity
-public class SecurityConfig {
+@RequiredArgsConstructor
+public class MainConfig {
+    @Value("${event.topic}")
+    private String name;
+
+    @Bean
+    public NewTopic mainEvent(){
+        return TopicBuilder.name(name).partitions(1).replicas(1).build();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, EventService eventService, AuthService authService) throws Exception {

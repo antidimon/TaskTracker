@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: ${DOCKER_DB_URL}
+
+schedule:
+  url: http://email-service:${EMAIL_SERVICE_PORT}/stats

@@ -27,17 +27,27 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
 
-    public List<String> getTasksNamesByProjectId(long id) {
-        return taskRepository.findAllTaskNames(id);
-    }
-
-    public Task getTaskFromDto(TaskInputDTO taskDTO, Project project) {
-        return taskMapper.inputDTOToTask(taskDTO, project);
-    }
 
     @Transactional
     public void save(Task task) {
         taskRepository.save(task);
+    }
+
+    @Transactional
+    public void updateTask(Task task) {
+        Task foundedTask = taskRepository.findById(task.getId()).get();
+
+        foundedTask.setStatus(task.getStatus());
+        foundedTask.setPriority(task.getPriority());
+        foundedTask.setName(task.getName());
+        foundedTask.setDeadline(task.getDeadline());
+
+        taskRepository.save(foundedTask);
+    }
+
+    @Transactional
+    public void deleteTask(Task task) {
+        taskRepository.delete(task);
     }
 
     public List<TaskOutputDTO> getToDoTasksSorted(List<TaskOutputDTO> tasks) {
@@ -73,25 +83,17 @@ public class TaskService {
         task.setDeadline(LocalDateTime.parse(task.getDeadline().format(formatter), formatter));
         return task;
     }
-    @Transactional
-    public void updateTask(Task task) {
-        Task foundedTask = taskRepository.findById(task.getId()).get();
-
-        foundedTask.setStatus(task.getStatus());
-        foundedTask.setPriority(task.getPriority());
-        foundedTask.setName(task.getName());
-        foundedTask.setDeadline(task.getDeadline());
-
-        taskRepository.save(foundedTask);
-    }
-
-    @Transactional
-    public void deleteTask(Task task) {
-        taskRepository.delete(task);
-    }
 
     public Task findTaskByProjectAndName(Project project, String taskName) {
         Optional<Task> foundedTask = taskRepository.findByProjectIdAndName(project.getId(), taskName);
         return foundedTask.get();
+    }
+
+    public List<String> getTasksNamesByProjectId(long id) {
+        return taskRepository.findAllTaskNames(id);
+    }
+
+    public Task getTaskFromDto(TaskInputDTO taskDTO, Project project) {
+        return taskMapper.inputDTOToTask(taskDTO, project);
     }
 }

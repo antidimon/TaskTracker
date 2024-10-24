@@ -7,10 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class MyUserCreateDTO {
 
     @NotBlank
@@ -22,4 +22,5 @@ public class MyUserCreateDTO {
     private String password;
     @NotBlank
     private String confirmationPassword;
+
 }
