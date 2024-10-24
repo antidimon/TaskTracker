@@ -31,6 +31,7 @@ email-ов о изменениях внесённых в проекты поль
 * Flyway
 * Apache Kafka
 * Docker
+* JUnit
 
 ## Запуск 
 
