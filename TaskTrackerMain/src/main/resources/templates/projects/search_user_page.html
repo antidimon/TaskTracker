@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="/styles/search.css">
+</head>
+<body>
+<header>
+    <a href="/">
+        <h1>Task Manager</h1>
+    </a>
+    <div class="project-name-container">
+        <a th:href="@{/projects/{id}(id=${project.getId()})}">
+            <h2 class="project-name" th:text="${project.getName()}">Проект</h2>
+        </a>
+    </div>
+    <div class="user-info">
+        <h3 th:text="${authName}">Пользователь</h3>
+        <form action="/logout" method="post">
+            <button id="change-account-btn" >Сменить аккаунт</button>
+        </form>
+    </div>
+</header>
+
+<main>
+    <div class="search-container">
+        <form th:action="@{/projects/{project_id}/invite(project_id=${project.getId()})}" method="post">
+            <input type="text" name="username" class="search-input" placeholder="Введите username">
+            <button type="submit" class="search-button">Искать</button>
+        </form>
+    </div>
+
+    <ul class="user-list">
+        <div th:if="${!users.isEmpty()}">
+            <div th:each="user : ${users}">
+                <li class="user-item">
+                    <span class="user-name" th:text="${user.getUsername()}"></span>
+                    <form th:action="@{/projects/{project_id}/doInvite(project_id=${project.getId()})}" method="post" style="display:inline;">
+                        <button type="submit" class="invite-button">Пригласить</button>
+                        <input type="hidden" name="username" th:value="${user.getUsername()}"/>
+                    </form>
+                </li>
+            </div>
+        </div>
+        <li th:if="${users.isEmpty()}" class="no-users">Пользователи не найдены</li>
+    </ul>
+</main>
+
+</body>
+</html>

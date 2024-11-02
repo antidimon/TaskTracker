@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="/styles/home.css">
+</head>
+<body>
+<header>
+    <h1>Task Manager</h1>
+    <div th:if='${user}' class="user-info">
+        <h3 th:text="${user}">Пользователь</h3>
+        <form action="/logout" method="post">
+            <button id="change-account-btn" >Сменить аккаунт</button>
+        </form>
+    </div>
+    <div th:unless="${user}" class="user-info">
+        <a href="/login" class="login-button">Log in</a>
+    </div>
+</header>
+
+<main>
+    <section id="tasks">
+        <h2>Ваши задачи</h2>
+        <form class="task-form" method="post" action="/projects" th:object="${createProject}">
+            <input th:field="*{name}" type="text" placeholder="Введите задачу...">
+            <button>Добавить</button>
+        </form>
+        <span th:if="${exception != null && exception.equals('name')}" class="error-span">У вас уже есть проект с данным названием</span>
+        <span th:if="${exception != null && exception.equals('delete')}" class="error-span">Невозможно удалить данный проект</span>
+        <ul class="task-list" th:if="${user_projects}">
+            <span th:if="${!user_projects.isEmpty()}">Ваши проекты</span>
+            <li th:each="project : ${user_projects}" class="task-item">
+                <a th:text="${project.getName()}" th:href="@{/projects/{id}(id=${project.getId()})}" class="project-link">Задача</a>
+                <div class="action-container">
+                    <span th:text="${project.is_active() ? 'Активно' : 'Неактивно'}" class="status-span"></span>
+                    <form th:action="@{/projects/{id}/delete(id=${project.getId()})}" method="post">
+                        <button type="submit" class="delete-btn">Удалить</button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+        <ul class="task-list" th:if="${dev_projects}">
+            <span th:if="${!dev_projects.isEmpty()}">Проекты в которых вы принимаете участие</span>
+            <li th:each="project : ${dev_projects}" class="task-item">
+                <a th:text="${project.getName()}" th:href="@{/projects/{id}(id=${project.getId()})}" class="project-link">Задача</a>
+                <div class="action-container">
+                    <span th:text="${project.is_active() ? 'Активно' : 'Неактивно'}" class="status-span"></span>
+                </div>
+            </li>
+        </ul>
+
+    </section>
+
+    <section id="about">
+        <h2>О проекте</h2>
+        <p>Этот таск-менеджер поможет вам организовать свои задачи и улучшить продуктивность.</p>
+    </section>
+
+    <section id="contact">
+        <h2>Контакты</h2>
+        <p>Свяжитесь с нами по адресу: info@taskmanager.com</p>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2023 Task Manager. Все права защищены.</p>
+</footer>
+</body>
+</html>

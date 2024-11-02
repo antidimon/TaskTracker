@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="TaskTrackerMain" />
+        <module name="TaskTrackerEmails" />
+        <module name="TaskTrackerStatistics" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="eg" target="17" />
+      <module name="heh" target="17" />
+      <module name="TaskTrackerWeb" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="TaskTrackerEmails" options="-parameters" />
+      <module name="TaskTrackerMain" options="-parameters" />
+      <module name="TaskTrackerStatistics" options="-parameters" />
+      <module name="TaskTrackerWeb" options="-parameters" />
+      <module name="eg" options="-parameters" />
+      <module name="heh" options="-parameters" />
+    </option>
+  </component>
+</project>

@@ -1,0 +1,36 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: TaskTrackerStatistics
+
+  datasource:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVER}
+    consumer:
+      group-id: "events-1"
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+    listener:
+      auto-startup: true
+
+schedule:
+  time: "0 0 0 * * ?" #"0 */3 * * * ?"

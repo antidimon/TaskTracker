@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/TaskTrackerEmails/pom.xml" />
+        <option value="$PROJECT_DIR$/TaskTrackerMain/pom.xml" />
+        <option value="$PROJECT_DIR$/TaskTrackerStatistics/pom.xml" />
+        <option value="$PROJECT_DIR$/heh/pom.xml" />
+        <option value="$PROJECT_DIR$/TaskTrackerWeb/pom.xml" />
+        <option value="$PROJECT_DIR$/eg/pom.xml" />
+      </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/TaskTrackerWeb/pom.xml" />
+        <option value="$PROJECT_DIR$/eg/pom.xml" />
+        <option value="$PROJECT_DIR$/heh/pom.xml" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectRootManager">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

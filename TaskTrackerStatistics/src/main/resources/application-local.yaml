@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: ${LOCAL_DB_URL}
+
+schedule:
+  url: http://localhost:${EMAIL_SERVICE_PORT}/stats

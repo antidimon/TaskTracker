@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="/styles/project.css">
+</head>
+<body>
+<header>
+    <a href="/">
+        <h1>Task Manager</h1>
+    </a>
+    <div class="project-name-container">
+        <h2 class="project-name" th:text="${project.getName()}">Проект</h2>
+    </div>
+    <div class="user-info">
+        <h3 th:text="${user}">Пользователь</h3>
+        <form action="/logout" method="post">
+            <button id="change-account-btn" >Сменить аккаунт</button>
+        </form>
+    </div>
+</header>
+
+<main>
+    <h2 class="centered-title">Разработчики проекта</h2>
+    <ul class="developer-list" th:if="${developers.size() != 0}">
+        <li th:each="developer : ${developers}" class="developer-item">
+            <span th:text="${developer.getUsername()}" class="developer-name"></span>
+            <form th:if="${isOwner}" th:action="@{/projects/{project_id}/kick/{username}(project_id=${project.getId()}, username=${developer.getUsername()})}" method="post" class="remove-form">
+                <button type="submit" class="remove-button">Удалить</button>
+            </form>
+        </li>
+    </ul>
+    <div th:unless="${developers.size() != 0}" class="no-developers">
+        <span>Нет добавленных пользователей</span>
+    </div>
+    <div class="invite-button-container">
+        <form th:if="${isOwner}" th:action="@{/projects/{project_id}/invite(project_id=${project.getId()})}" method="get">
+            <input type="hidden" name="username" value="">
+            <button class="invite-button">Пригласить пользователя</button>
+        </form>
+    </div>
+    <h2 class="task-manager">Управление задачами</h2>
+    <form th:if="${isOwner}" th:action="@{/projects/{id}/tasks(id=${project.getId()})}" method="post" th:object="${taskInput}">
+        <div>
+            <label for="taskTitle">Название задачи:</label>
+            <input type="text" id="taskTitle" name="title" placeholder="Введите название задачи" th:field="*{name}" required>
+        </div>
+
+        <div>
+            <label for="status">Статус:</label>
+            <select th:field="*{status}" id="status" name="status" required>
+                <option th:value="TODO">TODO</option>
+                <option th:value="IN_PROGRESS">IN_PROGRESS</option>
+                <option th:value="COMPLETED">COMPLETED</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="priority">Приоритет:</label>
+            <select th:field="*{priority}" id="priority" name="priority" required>
+                <option th:value="1">1</option>
+                <option th:value="2">2</option>
+                <option th:value="3">3</option>
+            </select>
+        </div>
+        <div>
+            <label for="deadline">Дедлайн:</label>
+            <input type="datetime-local" id="deadline" name="deadline" th:field="*{deadline}" required>
+        </div>
+
+        <button type="submit" class="add-task-button">Добавить задачу</button>
+    </form>
+
+    <div class="task-container">
+        <div class="task-column">
+            <h3>TO DO</h3>
+            <div th:each="task: ${todoTasks}">
+                <div class="task" th:style="${task.getPriority() == 1 ? 'background: #D3D3D3' : (task.getPriority() == 2 ? 'background: #FFFACD' : 'background: #FFCCCB')}">
+                    <div class="task-content">
+                        <a class="task-link" th:text="${task.getName()}" th:href="@{/projects/{project_id}/tasks/{taskName}(taskName=${task.getName()}, project_id=${project.getId()})}">Task name</a>
+                    </div>
+                    <div class="task-deadline" th:text="${task.getStringDeadline().toString()}">Deadline</div>
+                </div>
+            </div>
+        </div>
+        <div class="task-column">
+            <h3>In Progress</h3>
+            <div th:each="task: ${inProgressTasks}">
+                <div class="task" th:style="${task.getPriority() == 1 ? 'background: #D3D3D3' : (task.getPriority() == 2 ? 'background: #FFFACD' : 'background: #FFCCCB')}">
+                    <div class="task-content">
+                        <a class="task-link" th:text="${task.getName()}" th:href="@{/projects/{project_id}/tasks/{taskName}(taskName=${task.getName()}, project_id=${project.getId()})}">Task name</a>
+                    </div>
+                    <div class="task-deadline" th:text="${task.getStringDeadline()}">Deadline</div>
+                </div>
+            </div>
+        </div>
+        <div class="task-column">
+            <h3>Completed</h3>
+            <div style="background: limegreen" class="task" th:each="task: ${completedTasks}">
+                <div class="task-content">
+                    <a class="task-link" th:text="${task.getName()}" th:href="@{/projects/{project_id}/tasks/{taskName}(taskName=${task.getName()}, project_id=${project.getId()})}">Task name</a>
+                </div>
+                <div class="task-deadline" th:text="${task.getStringDeadline().toString()}">Deadline</div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
