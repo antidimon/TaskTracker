@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="TaskTrackerMain" />
         <module name="TaskTrackerEmails" />
+        <module name="TaskTrackerBack" />
         <module name="TaskTrackerStatistics" />
       </profile>
     </annotationProcessing>
@@ -20,6 +21,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="TaskTrackerBack" options="-parameters" />
       <module name="TaskTrackerEmails" options="-parameters" />
       <module name="TaskTrackerMain" options="-parameters" />
       <module name="TaskTrackerStatistics" options="-parameters" />
